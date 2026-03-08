@@ -234,7 +234,7 @@
     if(crop) payload.crop = crop;
 
     try {
-      const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook-test/ai-chat', {
+      const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat', {
         method:'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -262,6 +262,7 @@
 
 </body>
 </html>
+
 
 
 
