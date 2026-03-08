@@ -175,11 +175,11 @@
   <h1>AI Agriculture Export Assistant</h1>
 
   <div class="info">
-    <p>We cover these crops: <strong>Mango, Rice, Wheat, Cotton</strong>.</p>
+    <p>Our AI can provide information about export of following crops: <strong>Mango, Rice, Wheat, Cotton, Chilli</strong>.</p>
     <p>Sample questions you can ask:</p>
     <ul>
       <li>How can I export mango to UAE?</li>
-      <li>What documents are needed for rice export?</li>
+      <li>Wich permits are needed for rice export?</li>
       <li>Which countries import Pakistani wheat?</li>
     </ul>
   </div>
@@ -189,9 +189,10 @@
     <button data-crop="Rice">Rice</button>
     <button data-crop="Wheat">Wheat</button>
     <button data-crop="Cotton">Cotton</button>
+     <button data-crop="Cotton">Chilli</button>
   </div>
 
-  <button id="start-chat" class="button-primary">Ask AI Agent</button>
+  <button id="start-chat" class="button-primary">Ask AI Advisor</button>
 
   <div id="chat-container">
     <div id="chat-messages"></div>
@@ -233,7 +234,7 @@
     if(crop) payload.crop = crop;
 
     try {
-      const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook-test/ai-chat', {
+      const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat', {
         method:'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -261,6 +262,7 @@
 
 </body>
 </html>
+
 
 
 
