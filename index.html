@@ -79,7 +79,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Theme Toggle - Positioned Right */
+    /* Theme Toggle */
     .theme-toggle {
       position: absolute;
       top: 12px;
@@ -108,7 +108,7 @@
       transform: rotate(180deg) scale(1.1);
     }
 
-    /* Landing Header - Date/Time moved LEFT */
+    /* Landing Header */
     .landing-header {
       background: var(--header-bg);
       color: white;
@@ -152,6 +152,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .header-top h1 {
@@ -178,44 +185,55 @@
       50% { transform: translateY(-5px); }
     }
 
-    /* NEON GLOW DATETIME - Moved LEFT */
+    .header-top h1 span {
+      font-size: 0.9rem;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-left: 5px;
+    }
+
+    /* NEON DATETIME - Fixed position */
     .datetime-widget {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.25);
       backdrop-filter: blur(10px);
-      padding: 8px 12px;
-      border-radius: 30px;
-      font-size: 0.75rem;
+      padding: 8px 15px;
+      border-radius: 40px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      animation: neonPulse 2s infinite, fadeInRight 0.6s ease;
+      gap: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: neonPulse 2s infinite;
       box-shadow: var(--neon-glow);
-      margin-left: 0; /* Aligned left */
-      margin-right: auto; /* Pushes it left */
+      font-weight: 500;
+      margin-left: auto;
+      margin-right: 50px; /* Space for theme toggle */
     }
 
     @keyframes neonPulse {
-      0%, 100% { box-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color), 0 0 15px #4ade80; }
+      0%, 100% { box-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color); }
       50% { box-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color), 0 0 30px #4ade80; }
-    }
-
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
     }
 
     .datetime-widget .date {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      font-size: 0.85rem;
+    }
+
+    .datetime-widget .date i {
+      font-size: 0.8rem;
+      opacity: 0.9;
     }
 
     .datetime-widget .time {
-      font-weight: 600;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 2px 8px;
-      border-radius: 20px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
     }
 
     .header-subtitle {
@@ -233,14 +251,6 @@
     /* Compact Header */
     .landing-header.chat-active {
       padding: 12px 15px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .landing-header.chat-active .header-content {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
     }
 
     .landing-header.chat-active .header-top h1 {
@@ -257,6 +267,7 @@
       padding: 0;
       box-shadow: none;
       animation: none;
+      margin-right: 50px;
     }
 
     .landing-header.chat-active .datetime-widget .date {
@@ -363,11 +374,9 @@
     .topic-btn i {
       font-size: 1.1rem;
       color: var(--accent-primary);
-      transition: all 0.3s ease;
     }
 
     .topic-btn:active {
-      transform: scale(0.95);
       background: var(--accent-primary);
       color: white;
     }
@@ -402,7 +411,6 @@
     }
 
     .start-chat-btn i {
-      font-size: 1.2rem;
       animation: shake 3s infinite;
     }
 
@@ -478,7 +486,6 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* Chat Messages */
     .chat-messages {
       flex: 1;
       padding: 15px;
@@ -521,7 +528,6 @@
       text-align: right;
     }
 
-    /* Typing Indicator */
     .typing-indicator {
       background: var(--ai-message);
       padding: 12px 16px;
@@ -548,7 +554,6 @@
       30% { transform: translateY(-6px); }
     }
 
-    /* Quick Replies */
     .quick-replies {
       display: flex;
       gap: 8px;
@@ -569,7 +574,6 @@
       color: var(--text-primary);
       cursor: pointer;
       flex-shrink: 0;
-      transition: all 0.2s ease;
     }
 
     .quick-reply:active {
@@ -577,7 +581,6 @@
       color: white;
     }
 
-    /* Input Area */
     .chat-input-area {
       display: flex;
       padding: 12px;
@@ -623,24 +626,26 @@
 </head>
 <body data-theme="light">
 <div class="container">
-    <!-- Theme Toggle - Positioned Right -->
+    <!-- Theme Toggle -->
     <div class="theme-toggle">
         <button id="themeToggle" onclick="toggleTheme()">
             <i class="fas fa-moon"></i>
         </button>
     </div>
 
-    <!-- Landing Header - Date/Time moved LEFT with NEON GLOW -->
+    <!-- Landing Header -->
     <div class="landing-header" id="landingHeader">
         <div class="header-content">
             <div class="header-top">
-                <h1>
-                    <i class="fas fa-seedling"></i> AgriAI
-                    <span>v2.0</span>
-                </h1>
-                <!-- NEON GLOW DATETIME - Now on LEFT side -->
+                <div class="title-section">
+                    <h1>
+                        <i class="fas fa-seedling"></i> AgriAI
+                        <span>v2.0</span>
+                    </h1>
+                </div>
+                <!-- NEON DATETIME - Fixed with proper spacing -->
                 <div class="datetime-widget" id="datetimeWidget">
-                    <span class="date" id="currentDate"></span>
+                    <span class="date"><i class="far fa-calendar-alt"></i> <span id="currentDate"></span></span>
                     <span class="time" id="currentTime"></span>
                 </div>
             </div>
@@ -648,7 +653,7 @@
         </div>
     </div>
 
-    <!-- Crop Selection Grid -->
+    <!-- Crop Section -->
     <div class="crop-section" id="cropSection">
         <div class="section-title"><i class="fas fa-leaf"></i> Select Crop</div>
         <div class="crop-grid">
@@ -732,8 +737,8 @@
 
     function updateDateTime() {
         const now = new Date();
-        document.getElementById('currentDate').innerHTML = now.toLocaleDateString('en-US', { day:'numeric', month:'short' });
-        document.getElementById('currentTime').innerHTML = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+        document.getElementById('currentDate').innerHTML = now.toLocaleDateString('en-US', { day:'2-digit', month:'short' });
+        document.getElementById('currentTime').innerHTML = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:true });
     }
     updateDateTime();
     setInterval(updateDateTime, 60000);
@@ -752,7 +757,8 @@
         userInput.disabled = false;
         sendBtn.disabled = false;
         
-        const greeting = new Date().getHours() < 12 ? 'Good Morning' : 'Good Afternoon';
+        const hour = new Date().getHours();
+        const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
         addMessage('ai', `${greeting}! 👋 I'm your AgriExport Assistant. How can I help you today?\n\nAsk me about:\n• Crop export requirements\n• Required documents\n• Global markets\n• Pesticide limits\n• Treatment protocols\n• Pest management`);
         
         updateQuickReplies();
