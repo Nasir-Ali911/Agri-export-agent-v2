@@ -44,6 +44,8 @@
       --user-message: #dcf8c6;
       --ai-message: #ffffff;
       --header-bg: linear-gradient(145deg, #0b4f2e, #1d7a3d);
+      --neon-color: #a5f3b0;
+      --neon-glow: 0 0 5px #a5f3b0, 0 0 10px #a5f3b0, 0 0 15px #4ade80;
     }
 
     [data-theme="dark"] {
@@ -57,6 +59,8 @@
       --user-message: #2b4b2b;
       --ai-message: #2d3748;
       --header-bg: linear-gradient(145deg, #0a3b22, #155f2e);
+      --neon-color: #86efac;
+      --neon-glow: 0 0 5px #86efac, 0 0 10px #86efac, 0 0 15px #22c55e;
     }
 
     .container {
@@ -71,23 +75,16 @@
     }
 
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Theme Toggle */
+    /* Theme Toggle - Positioned Right */
     .theme-toggle {
       position: absolute;
       top: 12px;
       right: 15px;
       z-index: 100;
-      animation: fadeIn 0.8s ease;
     }
 
     .theme-toggle button {
@@ -111,11 +108,7 @@
       transform: rotate(180deg) scale(1.1);
     }
 
-    .theme-toggle button:active {
-      transform: scale(0.9);
-    }
-
-    /* Landing Header */
+    /* Landing Header - Date/Time moved LEFT */
     .landing-header {
       background: var(--header-bg);
       color: white;
@@ -129,14 +122,8 @@
     }
 
     @keyframes headerSlide {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .landing-header::before {
@@ -153,12 +140,6 @@
     @keyframes rotate {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
-    }
-
-    .landing-header.chat-active {
-      padding: 12px 15px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
     }
 
     .header-content {
@@ -183,14 +164,8 @@
     }
 
     @keyframes titlePop {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     .header-top h1 i {
@@ -203,17 +178,9 @@
       50% { transform: translateY(-5px); }
     }
 
-    .header-top h1 span {
-      font-size: 0.9rem;
-      background: rgba(255,255,255,0.2);
-      padding: 3px 8px;
-      border-radius: 20px;
-      margin-left: 8px;
-      backdrop-filter: blur(5px);
-    }
-
+    /* NEON GLOW DATETIME - Moved LEFT */
     .datetime-widget {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       padding: 8px 12px;
       border-radius: 30px;
@@ -221,19 +188,34 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      animation: fadeInRight 0.6s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: neonPulse 2s infinite, fadeInRight 0.6s ease;
+      box-shadow: var(--neon-glow);
+      margin-left: 0; /* Aligned left */
+      margin-right: auto; /* Pushes it left */
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { box-shadow: 0 0 5px var(--neon-color), 0 0 10px var(--neon-color), 0 0 15px #4ade80; }
+      50% { box-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color), 0 0 30px #4ade80; }
     }
 
     @keyframes fadeInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .datetime-widget .date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .datetime-widget .time {
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 8px;
+      border-radius: 20px;
     }
 
     .header-subtitle {
@@ -244,17 +226,17 @@
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Compact Header Animation */
+    /* Compact Header */
+    .landing-header.chat-active {
+      padding: 12px 15px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
     .landing-header.chat-active .header-content {
       flex-direction: row;
       align-items: center;
@@ -273,6 +255,8 @@
     .landing-header.chat-active .datetime-widget {
       background: transparent;
       padding: 0;
+      box-shadow: none;
+      animation: none;
     }
 
     .landing-header.chat-active .datetime-widget .date {
@@ -310,18 +294,10 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      animation: slideInLeft 0.5s ease;
     }
 
     .section-title i {
       color: var(--accent-primary);
-      animation: rotateSoft 3s infinite;
-    }
-
-    @keyframes rotateSoft {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(10deg); }
-      75% { transform: rotate(-10deg); }
     }
 
     .crop-grid {
@@ -345,37 +321,6 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       color: white;
-      animation: cardPop 0.5s ease;
-      animation-fill-mode: both;
-    }
-
-    .crop-btn:nth-child(1) { animation-delay: 0.1s; }
-    .crop-btn:nth-child(2) { animation-delay: 0.2s; }
-    .crop-btn:nth-child(3) { animation-delay: 0.3s; }
-    .crop-btn:nth-child(4) { animation-delay: 0.4s; }
-
-    @keyframes cardPop {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .crop-btn i {
-      font-size: 1.2rem;
-      transition: transform 0.3s ease;
-    }
-
-    .crop-btn:hover i {
-      transform: scale(1.2);
-    }
-
-    .crop-btn:active {
-      transform: scale(0.9);
     }
 
     .crop-btn[data-crop="Mango"] { background: linear-gradient(145deg, #ff9800, #f57c00); }
@@ -387,7 +332,6 @@
     .topic-section {
       padding: 0 15px 15px;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      animation: fadeIn 1s ease;
     }
 
     .topic-section.chat-active {
@@ -414,26 +358,6 @@
       color: var(--text-primary);
       font-size: 0.7rem;
       font-weight: 500;
-      animation: slideInUp 0.5s ease;
-      animation-fill-mode: both;
-    }
-
-    .topic-btn:nth-child(1) { animation-delay: 0.1s; }
-    .topic-btn:nth-child(2) { animation-delay: 0.2s; }
-    .topic-btn:nth-child(3) { animation-delay: 0.3s; }
-    .topic-btn:nth-child(4) { animation-delay: 0.4s; }
-    .topic-btn:nth-child(5) { animation-delay: 0.5s; }
-    .topic-btn:nth-child(6) { animation-delay: 0.6s; }
-
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .topic-btn i {
@@ -442,17 +366,14 @@
       transition: all 0.3s ease;
     }
 
-    .topic-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-
-    .topic-btn:hover i {
-      transform: scale(1.2);
-    }
-
     .topic-btn:active {
       transform: scale(0.95);
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .topic-btn:active i {
+      color: white;
     }
 
     /* Start Chat Button */
@@ -472,16 +393,12 @@
       gap: 10px;
       transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       box-shadow: 0 8px 20px rgba(30, 142, 62, 0.3);
-      animation: pulseButton 2s infinite, slideInUp 0.7s ease;
+      animation: pulseButton 2s infinite;
     }
 
     @keyframes pulseButton {
-      0%, 100% {
-        box-shadow: 0 8px 20px rgba(30, 142, 62, 0.3);
-      }
-      50% {
-        box-shadow: 0 8px 30px rgba(30, 142, 62, 0.6);
-      }
+      0%, 100% { box-shadow: 0 8px 20px rgba(30, 142, 62, 0.3); }
+      50% { box-shadow: 0 8px 30px rgba(30, 142, 62, 0.6); }
     }
 
     .start-chat-btn i {
@@ -496,14 +413,6 @@
       15% { transform: rotate(0); }
     }
 
-    .start-chat-btn:hover {
-      transform: scale(1.02);
-    }
-
-    .start-chat-btn:active {
-      transform: scale(0.98);
-    }
-
     .start-chat-btn.hidden {
       display: none;
     }
@@ -516,18 +425,6 @@
       background: var(--bg-secondary);
       height: 100%;
       overflow: hidden;
-      animation: slideInChat 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes slideInChat {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .chat-container.visible {
@@ -541,18 +438,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      animation: slideInDown 0.4s ease;
-    }
-
-    @keyframes slideInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
 
     .chat-header-avatar {
@@ -565,7 +450,6 @@
       justify-content: center;
       color: white;
       font-size: 1.2rem;
-      animation: rotateSoft 4s infinite;
     }
 
     .chat-header-info h3 {
@@ -612,18 +496,6 @@
       font-size: 0.9rem;
       line-height: 1.4;
       position: relative;
-      animation: messagePop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    @keyframes messagePop {
-      0% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
 
     .user {
@@ -656,7 +528,6 @@
       border-radius: 22px;
       display: inline-block;
       align-self: flex-start;
-      animation: fadeIn 0.3s ease;
     }
 
     .typing-indicator span {
@@ -687,7 +558,6 @@
       overflow-x: auto;
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
-      animation: slideInUp 0.4s ease;
     }
 
     .quick-reply {
@@ -702,14 +572,9 @@
       transition: all 0.2s ease;
     }
 
-    .quick-reply:hover {
+    .quick-reply:active {
       background: var(--accent-primary);
       color: white;
-      transform: scale(1.05);
-    }
-
-    .quick-reply:active {
-      transform: scale(0.95);
     }
 
     /* Input Area */
@@ -720,7 +585,6 @@
       border-top: 1px solid var(--border-color);
       gap: 8px;
       align-items: center;
-      animation: slideInUp 0.5s ease;
     }
 
     .chat-input {
@@ -731,14 +595,11 @@
       font-size: 0.9rem;
       background: var(--bg-secondary);
       color: var(--text-primary);
-      transition: all 0.3s ease;
     }
 
     .chat-input:focus {
       outline: none;
       border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(30, 142, 62, 0.1);
-      transform: scale(1.02);
     }
 
     .send-btn {
@@ -753,34 +614,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    .send-btn:hover {
-      transform: scale(1.1) rotate(90deg);
     }
 
     .send-btn:active {
       transform: scale(0.9);
     }
-
-    .send-btn:disabled,
-    .chat-input:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body data-theme="light">
 <div class="container">
-    <!-- Theme Toggle -->
+    <!-- Theme Toggle - Positioned Right -->
     <div class="theme-toggle">
         <button id="themeToggle" onclick="toggleTheme()">
             <i class="fas fa-moon"></i>
         </button>
     </div>
 
-    <!-- Landing Header -->
+    <!-- Landing Header - Date/Time moved LEFT with NEON GLOW -->
     <div class="landing-header" id="landingHeader">
         <div class="header-content">
             <div class="header-top">
@@ -788,6 +638,7 @@
                     <i class="fas fa-seedling"></i> AgriAI
                     <span>v2.0</span>
                 </h1>
+                <!-- NEON GLOW DATETIME - Now on LEFT side -->
                 <div class="datetime-widget" id="datetimeWidget">
                     <span class="date" id="currentDate"></span>
                     <span class="time" id="currentTime"></span>
@@ -845,15 +696,12 @@
 </div>
 
 <script>
-    // ==================== CONFIG ====================
-    const WEBHOOK_URL = 'https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat'; // Update this!
+    const WEBHOOK_URL = 'https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat';
     
-    // ==================== STATE ====================
     let isChatStarted = false;
     let isWaiting = false;
     let abortController = null;
     
-    // ==================== DOM ELEMENTS ====================
     const landingHeader = document.getElementById('landingHeader');
     const cropSection = document.getElementById('cropSection');
     const topicSection = document.getElementById('topicSection');
@@ -864,7 +712,6 @@
     const sendBtn = document.getElementById('sendBtn');
     const quickReplies = document.getElementById('quickReplies');
 
-    // ==================== THEME ====================
     function toggleTheme() {
         const body = document.body;
         const icon = document.querySelector('#themeToggle i');
@@ -878,11 +725,11 @@
             localStorage.setItem('theme', 'light');
         }
     }
+    
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.body.setAttribute('data-theme', savedTheme);
     document.querySelector('#themeToggle i').className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
-    // ==================== DATE/TIME ====================
     function updateDateTime() {
         const now = new Date();
         document.getElementById('currentDate').innerHTML = now.toLocaleDateString('en-US', { day:'numeric', month:'short' });
@@ -891,7 +738,6 @@
     updateDateTime();
     setInterval(updateDateTime, 60000);
 
-    // ==================== START CHAT ====================
     function startChat() {
         if (isChatStarted) return;
         
@@ -913,7 +759,6 @@
         userInput.focus();
     }
 
-    // ==================== QUICK REPLIES ====================
     const quickReplyOptions = [
         { text: '📄 Documents', query: 'What export documents are required?' },
         { text: '🌍 Markets', query: 'Which countries import the most?' },
@@ -935,7 +780,6 @@
         });
     }
 
-    // ==================== TOPIC HANDLERS ====================
     function askTopic(topic) {
         if (!isChatStarted) startChat();
         const questions = {
@@ -954,7 +798,6 @@
         setTimeout(() => sendMessage(`Tell me about ${crop} export requirements`), 300);
     }
 
-    // ==================== MESSAGE HANDLING ====================
     function addMessage(sender, text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${sender}`;
@@ -983,7 +826,6 @@
         if (el) el.remove();
     }
 
-    // ==================== SEND MESSAGE ====================
     async function sendMessage(msg) {
         if (!msg.trim() || isWaiting || !isChatStarted) return;
         
@@ -1028,7 +870,6 @@
         }
     }
 
-    // ==================== EVENT LISTENERS ====================
     sendBtn.addEventListener('click', () => {
         if (userInput.value.trim()) sendMessage(userInput.value.trim());
     });
@@ -1039,7 +880,6 @@
         }
     });
 
-    // Restore chat if previously started
     if (localStorage.getItem('chatActive') === 'true') {
         startChat();
     }
