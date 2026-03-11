@@ -3,270 +3,1344 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Agriculture Export Assistant</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <title>🌾 AgriExport AI - Smart Export Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* Reset and font */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease;
+    }
+
     body {
-      margin:0; padding:0;
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(135deg, #d4edda, #f0f0f0);
-      display: flex; justify-content: center; align-items: flex-start;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      padding-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      animation: gradientBG 15s ease infinite;
+      background-size: 400% 400%;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Theme Variables */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8f9fa;
+      --text-primary: #2d3748;
+      --text-secondary: #4a5568;
+      --accent-primary: #28a745;
+      --accent-hover: #218838;
+      --accent-light: #d4edda;
+      --border-color: #e2e8f0;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --user-message: #dcf8c6;
+      --ai-message: #ffffff;
+      --card-bg: #ffffff;
+      --header-bg: linear-gradient(135deg, #2d7a2d, #1e4f1e);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1a202c;
+      --bg-secondary: #2d3748;
+      --text-primary: #f7fafc;
+      --text-secondary: #e2e8f0;
+      --accent-primary: #48bb78;
+      --accent-hover: #38a169;
+      --accent-light: #2d4a2d;
+      --border-color: #4a5568;
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --user-message: #2b4b2b;
+      --ai-message: #2d3748;
+      --card-bg: #2d3748;
+      --header-bg: linear-gradient(135deg, #1e4f1e, #0d2b0d);
     }
 
     .container {
-      max-width: 500px;
+      max-width: 900px;
       width: 100%;
-      background: #ffffff;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      background: var(--bg-primary);
+      border-radius: 30px;
+      box-shadow: 0 25px 50px -12px var(--shadow-color);
+      overflow: hidden;
+      position: relative;
+      transform: translateY(0);
+      animation: floatIn 0.6s ease-out;
+    }
+
+    @keyframes floatIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .theme-toggle button {
+      background: var(--bg-secondary);
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle button:hover {
+      transform: rotate(180deg) scale(1.1);
+    }
+
+    /* Header */
+    .header {
+      background: var(--header-bg);
+      color: white;
+      padding: 30px 30px 20px;
+      position: relative;
       overflow: hidden;
     }
 
-    h1 {
-      text-align:center;
-      background: #2d7a2d;
-      color:white;
-      margin:0;
-      padding: 20px;
-      font-weight: 500;
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
     }
 
-    .info {
-      padding: 20px;
-      line-height: 1.6;
-      color: #333;
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    .info ul {
-      padding-left: 20px;
+    .header-content {
+      position: relative;
+      z-index: 1;
     }
 
-    .button-primary {
-      display:block;
-      width:90%;
-      margin: 10px auto;
-      padding:12px 0;
-      background: #28a745;
-      color:white;
-      text-align:center;
-      border:none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor:pointer;
-      transition: all 0.2s ease;
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
     }
 
-    .button-primary:hover {
-      background: #218838;
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideInLeft 0.6s ease;
     }
 
+    .header h1 i {
+      font-size: 2.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header p {
+      font-size: 1rem;
+      opacity: 0.9;
+      animation: slideInRight 0.6s ease;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Date/Time Widget */
+    .datetime-widget {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideInRight 0.6s ease;
+    }
+
+    .datetime-widget .date {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .datetime-widget .date i {
+      font-size: 1rem;
+    }
+
+    .datetime-widget .time {
+      font-weight: 600;
+      font-size: 1.1rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 3px 10px;
+      border-radius: 30px;
+    }
+
+    [data-theme="dark"] .datetime-widget {
+      background: rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Seasonality Bar */
+    .seasonality-bar {
+      background: var(--bg-secondary);
+      padding: 12px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .season-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .season-progress {
+      flex: 1;
+      height: 8px;
+      background: var(--border-color);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #28a745, #ffc107);
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    /* Info Section */
+    .info-section {
+      padding: 25px 30px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-section h3 {
+      color: var(--text-primary);
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-primary);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transform: translateY(0);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px var(--shadow-color);
+    }
+
+    .feature-card i {
+      font-size: 1.8rem;
+      color: var(--accent-primary);
+      margin-bottom: 10px;
+    }
+
+    .feature-card h4 {
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Crop Buttons */
     .crop-buttons {
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 20px 30px;
       justify-content: center;
-      padding: 0 10px 10px 10px;
     }
 
-    .crop-buttons button {
-      flex: 1 1 40%;
-      min-width: 100px;
-      background: #17a2b8;
-      color:white;
-      padding:10px 0;
-      border:none;
-      border-radius:20px;
-      cursor:pointer;
-      transition: all 0.2s ease;
-      font-weight: 500;
+    .crop-btn {
+      flex: 1 1 auto;
+      min-width: 120px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      position: relative;
+      overflow: hidden;
     }
 
-    .crop-buttons button:hover {
-      background: #138496;
+    .crop-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
     }
 
-    #chat-container {
-      display:none;
+    .crop-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .crop-btn i {
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .crop-btn:hover i {
+      transform: scale(1.2) rotate(360deg);
+    }
+
+    .crop-btn[data-crop="Mango"] { background: #ff9800; color: white; }
+    .crop-btn[data-crop="Rice"] { background: #795548; color: white; }
+    .crop-btn[data-crop="Wheat"] { background: #f1c40f; color: #2c3e50; }
+    .crop-btn[data-crop="Cotton"] { background: #3498db; color: white; }
+
+    /* Start Chat Button */
+    .start-chat-btn {
+      width: calc(100% - 60px);
+      margin: 0 30px 30px;
+      padding: 16px;
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .start-chat-btn::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(30deg); }
+      100% { transform: translateX(100%) rotate(30deg); }
+    }
+
+    .start-chat-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .start-chat-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Chat Container */
+    .chat-container {
+      display: none;
       flex-direction: column;
-      height: 450px;
-      border-top: 1px solid #ddd;
+      height: 500px;
+      background: var(--bg-primary);
+      animation: slideUp 0.5s ease;
     }
 
-    #chat-messages {
-      flex:1;
-      padding:15px;
-      overflow-y:auto;
-      background: #f9f9f9;
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chat-header {
+      padding: 15px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-header-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .chat-header-info h3 {
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .chat-header-info p {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #28a745;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: var(--bg-secondary);
     }
 
     .message {
-      margin:8px 0;
-      padding:10px 15px;
-      max-width: 75%;
+      margin: 12px 0;
+      padding: 12px 18px;
+      max-width: 80%;
       border-radius: 20px;
       clear: both;
       word-wrap: break-word;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+      animation: messagePop 0.4s ease;
+    }
+
+    @keyframes messagePop {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .user {
-      background: #dcf8c6;
-      float:right;
-      text-align:right;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: var(--user-message);
+      color: var(--text-primary);
+      float: right;
+      border-bottom-right-radius: 4px;
     }
 
     .ai {
-      background: #ffffff;
-      float:left;
-      text-align:left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      background: var(--ai-message);
+      color: var(--text-primary);
+      float: left;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
 
-    #input-area {
-      display:flex;
-      padding: 10px;
-      border-top:1px solid #ccc;
-      background: #fff;
+    .message ul {
+      margin: 8px 0;
+      padding-left: 20px;
     }
 
-    #user-input {
-      flex:1;
-      padding:10px 15px;
+    .message li {
+      margin: 4px 0;
+    }
+
+    .message b {
+      color: var(--accent-primary);
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    .typing-indicator {
+      background: var(--ai-message);
+      padding: 15px 20px;
+      border-radius: 20px;
+      display: inline-block;
+      float: left;
+      clear: both;
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      margin: 0 2px;
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 20px;
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-color);
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 20px;
+      border: 2px solid var(--border-color);
       border-radius: 25px;
-      border:1px solid #ccc;
-      font-size: 14px;
-      outline:none;
+      font-size: 0.95rem;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: all 0.3s ease;
     }
 
-    #send-btn {
-      margin-left:10px;
-      padding:10px 15px;
-      background: #28a745;
-      color:white;
-      border:none;
-      border-radius: 25px;
-      cursor:pointer;
-      transition: all 0.2s ease;
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+      transform: scale(1.02);
     }
 
-    #send-btn:hover {
-      background: #218838;
+    .chat-input:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
     }
 
-    /* Scrollbar styling */
-    #chat-messages::-webkit-scrollbar {
-      width:6px;
+    .send-btn {
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    #chat-messages::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,0.2);
-      border-radius:3px;
+    .send-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Quick Replies */
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .quick-reply {
+      padding: 8px 16px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-reply:hover:not(:disabled) {
+      background: var(--accent-primary);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .quick-reply:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Keyboard Hint */
+    .keyboard-hint {
+      position: absolute;
+      bottom: 90px;
+      right: 30px;
+      background: var(--bg-primary);
+      padding: 8px 15px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      box-shadow: 0 4px 12px var(--shadow-color);
+      display: flex;
+      gap: 15px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+
+    .keyboard-hint:hover {
+      opacity: 1;
+    }
+
+    .keyboard-hint kbd {
+      background: var(--bg-secondary);
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-family: monospace;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Error Message */
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    [data-theme="dark"] .error-message {
+      background: #721c24;
+      color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(3px);
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--bg-primary);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 600px) {
+      .container {
+        border-radius: 20px;
+      }
+
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .datetime-widget {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .crop-btn {
+        min-width: calc(50% - 6px);
+      }
+
+      .message {
+        max-width: 90%;
+      }
+
+      .keyboard-hint {
+        display: none;
+      }
     }
   </style>
 </head>
-<body>
+<body data-theme="light">
+  <div class="container">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+      <button id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
 
-<div class="container">
-  <h1>AI Agriculture Export Assistant</h1>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+    </div>
 
-  <div class="info">
-    <p>Our AI can provide information about export of following crops: <strong>Mango, Rice, Wheat, Cotton, Chilli</strong>.</p>
-    <p>Sample questions you can ask:</p>
-    <ul>
-      <li>How can I export mango to UAE?</li>
-      <li>Wich permits are needed for rice export?</li>
-      <li>Which countries import Pakistani wheat?</li>
-    </ul>
-  </div>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="header-top">
+          <h1>
+            <i class="fas fa-seedling"></i>
+            AgriExport AI
+          </h1>
+          <div class="datetime-widget" id="datetimeWidget">
+            <div class="date" id="currentDate"></div>
+            <div class="time" id="currentTime"></div>
+          </div>
+        </div>
+        <p>Your RAG-powered assistant for agricultural export regulations and requirements</p>
+      </div>
+    </div>
 
-  <div class="crop-buttons">
-    <button data-crop="Mango">Mango</button>
-    <button data-crop="Rice">Rice</button>
-    <button data-crop="Wheat">Wheat</button>
-    <button data-crop="Cotton">Cotton</button>
-   
-  </div>
+    <!-- Seasonality Bar (Static based on PDF data) -->
+    <div class="seasonality-bar" id="seasonalityBar">
+      <div class="season-info">
+        <i class="fas fa-calendar-check"></i>
+        <span id="seasonText">Based on export documentation from your PDFs</span>
+      </div>
+      <div class="season-progress">
+        <div class="progress-bar" id="seasonProgress" style="width: 75%;"></div>
+      </div>
+    </div>
 
-  <button id="start-chat" class="button-primary">Ask AI Advisor</button>
+    <!-- Info Section -->
+    <div class="info-section">
+      <h3><i class="fas fa-star" style="color: #ffc107; margin-right: 8px;"></i> Quick Actions</h3>
+      <div class="feature-grid">
+        <div class="feature-card" onclick="quickAction('documents')" id="documentsCard">
+          <i class="fas fa-file-alt"></i>
+          <h4>📄 Documents</h4>
+          <p>Required paperwork for export</p>
+        </div>
+        <div class="feature-card" onclick="quickAction('regulations')" id="regulationsCard">
+          <i class="fas fa-gavel"></i>
+          <h4>⚖️ Regulations</h4>
+          <p>Export rules from your PDFs</p>
+        </div>
+        <div class="feature-card" onclick="quickAction('markets')" id="marketsCard">
+          <i class="fas fa-chart-line"></i>
+          <h4>📊 Markets</h4>
+          <p>Top importing countries</p>
+        </div>
+        <div class="feature-card" onclick="quickAction('pesticides')" id="pesticidesCard">
+          <i class="fas fa-flask"></i>
+          <h4>🧪 MRLs</h4>
+          <p>Pesticide residue limits</p>
+        </div>
+      </div>
+    </div>
 
-  <div id="chat-container">
-    <div id="chat-messages"></div>
-    <div id="input-area">
-      <input type="text" id="user-input" placeholder="Type your question here..." />
-      <button id="send-btn">Send</button>
+    <!-- Crop Buttons -->
+    <div class="crop-buttons">
+      <button class="crop-btn" data-crop="Mango" onclick="askCrop('Mango')">
+        <i class="fas fa-leaf"></i> Mango
+      </button>
+      <button class="crop-btn" data-crop="Rice" onclick="askCrop('Rice')">
+        <i class="fas fa-bowl-rice"></i> Rice
+      </button>
+      <button class="crop-btn" data-crop="Wheat" onclick="askCrop('Wheat')">
+        <i class="fas fa-wheat-alt"></i> Wheat
+      </button>
+      <button class="crop-btn" data-crop="Cotton" onclick="askCrop('Cotton')">
+        <i class="fas fa-tshirt"></i> Cotton
+      </button>
+    </div>
+
+    <!-- Start Chat Button -->
+    <button class="start-chat-btn" id="startChatBtn" onclick="startChat()">
+      <i class="fas fa-comment-dots"></i>
+      Start Chat with AI Advisor
+    </button>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <div class="chat-header-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="chat-header-info">
+          <h3>AgriExport AI Assistant</h3>
+          <p>
+            <span class="online-dot"></span>
+            Online • Knowledge from 35+ PDFs
+          </p>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages"></div>
+
+      <div class="quick-replies" id="quickReplies"></div>
+
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="userInput" placeholder="Type your export question..." disabled>
+        <button class="send-btn" id="sendBtn" disabled>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint">
+      <span><kbd>⏎</kbd> to send</span>
+      <span><kbd>Esc</kbd> to clear</span>
     </div>
   </div>
 
-</div>
+  <script>
+    // ==================== STATE MANAGEMENT ====================
+    let isChatStarted = false;
+    let isWaitingForResponse = false;
+    let abortController = null; // For canceling requests if needed
 
-<script>
-  const startChatBtn = document.getElementById('start-chat');
-  const chatContainer = document.getElementById('chat-container');
-  const sendBtn = document.getElementById('send-btn');
-  const userInput = document.getElementById('user-input');
-  const chatMessages = document.getElementById('chat-messages');
-  const cropButtons = document.querySelectorAll('.crop-buttons button');
+    // DOM Elements
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const startChatBtn = document.getElementById('startChatBtn');
+    const chatContainer = document.getElementById('chatContainer');
+    const quickReplies = document.getElementById('quickReplies');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Disable all interactive elements initially
+    const interactiveElements = [
+      ...document.querySelectorAll('.feature-card'),
+      ...document.querySelectorAll('.crop-btn'),
+      ...document.querySelectorAll('.quick-reply'),
+      startChatBtn,
+      sendBtn,
+      userInput
+    ];
 
-  function addMessage(sender, message) {
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender === 'AI' ? 'ai' : 'user');
-    msgDiv.innerHTML = message;
-    chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  startChatBtn.addEventListener('click', () => {
-    chatContainer.style.display = 'flex';
-    startChatBtn.style.display = 'none';
-    addMessage("AI", "Hello! Ask me any question about crop export.");
-  });
-
-  async function sendMessage(msg, crop=null) {
-    addMessage("You", msg);
-    userInput.value = '';
-
-    const payload = { question: msg };
-    if(crop) payload.crop = crop;
-
-    try {
-      const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat', {
-        method:'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+    function setInteractiveEnabled(enabled) {
+      interactiveElements.forEach(el => {
+        if (el) el.disabled = !enabled;
       });
-      const data = await res.json();
-      addMessage("AI", data.reply);
-    } catch(e) {
-      addMessage("AI", "Sorry, something went wrong. Please try again.");
+      
+      // Special handling for feature cards (they're divs, not buttons)
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.style.pointerEvents = enabled ? 'auto' : 'none';
+        card.style.opacity = enabled ? '1' : '0.5';
+      });
+      
+      document.querySelectorAll('.crop-btn').forEach(btn => {
+        btn.disabled = !enabled;
+      });
+      
+      document.querySelectorAll('.quick-reply').forEach(btn => {
+        if (btn) btn.disabled = !enabled;
+      });
+      
+      if (startChatBtn) startChatBtn.disabled = !enabled;
+      if (sendBtn) sendBtn.disabled = !enabled || !isChatStarted || isWaitingForResponse;
+      if (userInput) userInput.disabled = !enabled || !isChatStarted || isWaitingForResponse;
     }
-  }
 
-  sendBtn.addEventListener('click', () => {
-    const msg = userInput.value.trim();
-    if(msg) sendMessage(msg);
-  });
+    // ==================== THEME MANAGEMENT ====================
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggle = document.getElementById('themeToggle').querySelector('i');
+      
+      if (body.getAttribute('data-theme') === 'light') {
+        body.setAttribute('data-theme', 'dark');
+        themeToggle.className = 'fas fa-sun';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.setAttribute('data-theme', 'light');
+        themeToggle.className = 'fas fa-moon';
+        localStorage.setItem('theme', 'light');
+      }
+    }
 
-  cropButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const crop = btn.dataset.crop;
-      const msg = `I want to know about ${crop} export.`;
-      sendMessage(msg, crop);
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+    document.getElementById('themeToggle').querySelector('i').className = 
+      savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+    // ==================== DATE/TIME WIDGET ====================
+    function updateDateTime() {
+      const now = new Date();
+      
+      const dateOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      
+      const timeOptions = { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      };
+      
+      const dateStr = now.toLocaleDateString('en-US', dateOptions);
+      const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+      
+      document.getElementById('currentDate').innerHTML = `<i class="far fa-calendar-alt"></i> ${dateStr}`;
+      document.getElementById('currentTime').innerHTML = `<i class="far fa-clock"></i> ${timeStr}`;
+    }
+
+    // Update every minute (not every second to save resources)
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+
+    // ==================== SEASONALITY (Static based on PDFs) ====================
+    function updateSeasonality() {
+      const month = new Date().getMonth();
+      
+      // This is static info FROM YOUR PDFs, not real-time market data
+      const pdfKnowledge = {
+        seasonInfo: "Based on your export documentation PDFs: Mango (Mar-Jun), Wheat (Apr-Jul), Rice (Oct-Dec), Cotton (Sep-Nov)",
+        progress: ((month + 1) / 12) * 100
+      };
+      
+      document.getElementById('seasonText').innerHTML = `<i class="fas fa-leaf"></i> ${pdfKnowledge.seasonInfo}`;
+      document.getElementById('seasonProgress').style.width = `${pdfKnowledge.progress}%`;
+    }
+
+    updateSeasonality();
+
+    // ==================== QUICK REPLIES ====================
+    const quickReplyOptions = [
+      { text: '📄 Required documents', query: 'What export documents are required?' },
+      { text: '🌍 Top markets', query: 'Which countries import the most?' },
+      { text: '⚖️ Regulations', query: 'Tell me about export regulations from the PDFs' },
+      { text: '🧪 MRL limits', query: 'What are the pesticide residue limits?' }
+    ];
+
+    function updateQuickReplies() {
+      quickReplies.innerHTML = '';
+      quickReplyOptions.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'quick-reply';
+        btn.textContent = option.text;
+        btn.onclick = () => sendMessage(option.query);
+        btn.disabled = !isChatStarted || isWaitingForResponse;
+        quickReplies.appendChild(btn);
+      });
+    }
+
+    // ==================== CHAT FUNCTIONS ====================
+    function startChat() {
+      if (isChatStarted) return;
+      
+      // Show loading
+      loadingOverlay.style.display = 'flex';
+      
+      setTimeout(() => {
+        chatContainer.style.display = 'flex';
+        startChatBtn.style.display = 'none';
+        isChatStarted = true;
+        
+        // Enable chat controls
+        userInput.disabled = false;
+        sendBtn.disabled = false;
+        
+        // Update quick replies
+        updateQuickReplies();
+        
+        // Welcome message
+        const greeting = getGreeting();
+        addMessage("AI", `${greeting}! 👋 I'm your AgriExport Assistant powered by your ${35} export PDFs.\n\nI can help you with:\n• Export requirements for Mango, Rice, Wheat, Cotton\n• Documentation and permits from your PDFs\n• Market access conditions\n• Pesticide residue limits (MRLs)\n\nWhat would you like to know?`);
+        
+        // Hide loading
+        loadingOverlay.style.display = 'none';
+        userInput.focus();
+      }, 500); // Small delay for smooth transition
+    }
+
+    function getGreeting() {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Good Morning';
+      if (hour < 18) return 'Good Afternoon';
+      return 'Good Evening';
+    }
+
+    function quickAction(type) {
+      if (!isChatStarted) {
+        startChat();
+        // Wait for chat to start then send message
+        setTimeout(() => {
+          const questions = {
+            documents: "What export documents are required according to the PDFs?",
+            regulations: "Tell me about export regulations from the PDFs",
+            markets: "Which are the top importing countries mentioned in the PDFs?",
+            pesticides: "What are the MRL requirements from the PDFs?"
+          };
+          sendMessage(questions[type] || questions.documents);
+        }, 600);
+      } else {
+        const questions = {
+          documents: "What export documents are required according to the PDFs?",
+          regulations: "Tell me about export regulations from the PDFs",
+          markets: "Which are the top importing countries mentioned in the PDFs?",
+          pesticides: "What are the MRL requirements from the PDFs?"
+        };
+        sendMessage(questions[type] || questions.documents);
+      }
+    }
+
+    function askCrop(crop) {
+      if (!isChatStarted) {
+        startChat();
+        setTimeout(() => {
+          sendMessage(`Tell me about ${crop} export requirements from the PDFs`, crop);
+        }, 600);
+      } else {
+        sendMessage(`Tell me about ${crop} export requirements from the PDFs`, crop);
+      }
+    }
+
+    function addMessage(sender, message, isError = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender === 'AI' ? 'ai' : 'user'}`;
+      
+      if (isError) {
+        msgDiv.classList.add('error-message');
+      }
+      
+      // Format message (handle line breaks and HTML from n8n)
+      const formattedMessage = message.replace(/\n/g, '<br>');
+      msgDiv.innerHTML = formattedMessage;
+      
+      // Add timestamp
+      const timestamp = document.createElement('div');
+      timestamp.className = 'timestamp';
+      timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      msgDiv.appendChild(timestamp);
+      
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+      const indicator = document.createElement('div');
+      indicator.className = 'typing-indicator';
+      indicator.id = 'typingIndicator';
+      indicator.innerHTML = '<span></span><span></span><span></span>';
+      chatMessages.appendChild(indicator);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('typingIndicator');
+      if (indicator) indicator.remove();
+    }
+
+    // Clear input with Escape key
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        userInput.value = '';
+      }
     });
-  });
-</script>
 
+    // ==================== MAIN SEND MESSAGE FUNCTION with CRASH PROTECTION ====================
+    async function sendMessage(msg, crop = null) {
+      // CRASH PROTECTION: Multiple input prevention
+      if (!msg.trim() || isWaitingForResponse || !isChatStarted) return;
+
+      // Lock all inputs
+      isWaitingForResponse = true;
+      userInput.disabled = true;
+      sendBtn.disabled = true;
+      
+      // Disable all quick replies and crop buttons
+      document.querySelectorAll('.quick-reply, .crop-btn, .feature-card').forEach(el => {
+        if (el) {
+          el.disabled = true;
+          if (el.classList && el.classList.contains('feature-card')) {
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.5';
+          }
+        }
+      });
+
+      // Clear input and add user message
+      const messageText = msg;
+      userInput.value = '';
+      addMessage("You", messageText);
+      
+      // Show typing indicator
+      showTypingIndicator();
+
+      // Create abort controller for timeout
+      abortController = new AbortController();
+      const timeoutId = setTimeout(() => abortController.abort(), 30000); // 30 second timeout
+
+      const payload = { 
+        question: messageText,
+        ...(crop && { crop })
+      };
+
+      try {
+        // ⚠️ IMPORTANT: Update this URL to your n8n webhook
+        const res = await fetch('https://n8n.srv1468126.hstgr.cloud/webhook/ai-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: abortController.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+        const data = await res.json();
+        
+        removeTypingIndicator();
+        addMessage("AI", data.reply || "I found information in your PDFs but couldn't format it properly.");
+        
+      } catch (error) {
+        clearTimeout(timeoutId);
+        removeTypingIndicator();
+        
+        let errorMessage = "❌ Sorry, I'm having trouble connecting. Please try again.";
+        
+        if (error.name === 'AbortError') {
+          errorMessage = "❌ Request timed out. The server is taking too long to respond.";
+        } else if (error.message.includes('Failed to fetch')) {
+          errorMessage = "❌ Cannot connect to the server. Please check if n8n is running.";
+        }
+        
+        addMessage("AI", errorMessage, true);
+        console.error('Error:', error);
+      } finally {
+        // Unlock all inputs
+        isWaitingForResponse = false;
+        
+        // Re-enable inputs
+        userInput.disabled = false;
+        sendBtn.disabled = false;
+        
+        document.querySelectorAll('.quick-reply, .crop-btn, .feature-card').forEach(el => {
+          if (el) {
+            el.disabled = false;
+            if (el.classList && el.classList.contains('feature-card')) {
+              el.style.pointerEvents = 'auto';
+              el.style.opacity = '1';
+            }
+          }
+        });
+        
+        userInput.focus();
+      }
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    sendBtn.addEventListener('click', () => {
+      const msg = userInput.value.trim();
+      if (msg) {
+        sendMessage(msg);
+      }
+    });
+
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const msg = userInput.value.trim();
+        if (msg) {
+          sendMessage(msg);
+        }
+      }
+    });
+
+    // Load chat state from localStorage
+    const chatState = localStorage.getItem('chatStarted');
+    if (chatState === 'true') {
+      startChat();
+    }
+
+    // Save chat state
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('chatStarted', isChatStarted);
+    });
+
+    // Particle effect for header
+    function createParticles() {
+      const header = document.querySelector('.header');
+      for (let i = 0; i < 15; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '3px';
+        particle.style.height = '3px';
+        particle.style.background = 'rgba(255,255,255,0.2)';
+        particle.style.borderRadius = '50%';
+        particle.style.pointerEvents = 'none';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animation = `float ${8 + Math.random() * 10}s linear infinite`;
+        header.appendChild(particle);
+      }
+    }
+
+    // Add float animation style
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.5; }
+        90% { opacity: 0.5; }
+        100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize particles
+    createParticles();
+
+    // Enable all elements initially
+    setInteractiveEnabled(true);
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
